@@ -1,140 +1,157 @@
-openapi: 3.0.0
+# prettier-ignore
+openapi: 3.0.1
 info:
-    title: Cachie API
-    description: API for tracking search queries and analyzing patterns.
-    version: 1.0.0
-paths:
-    /search:
-        post:
-            summary: Cache a search query.
-            operationId: searchQuery
-            parameters:
-                - name: x-trace-id
-                  in: header
-                  description: Trace ID for log correlation.
-                  required: false
-                  schema:
-                      type: string
-                      example: "trace-abc123"
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            required:
-                                - search_query
-                                - client_id
-                                - session_id
-                            properties:
-                                search_query:
-                                    type: string
-                                    example: "The quick brown fox"
-                                client_id:
-                                    type: string
-                                    example: "client_123"
-                                session_id:
-                                    type: string
-                                    example: "session_1"
-            responses:
-                "201":
-                    description: Search query cached successfully.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    status:
-                                        type: string
-                                        example: "ok"
-                                    processed_tokens:
-                                        type: integer
-                                        example: 5
-                                    processing_time:
-                                        type: string
-                                        example: "5ms"
-                "400":
-                    description: Bad request.
-                "500":
-                    description: Internal server error.
+  title: Cachie API
+  description: An in-memory cache analytics engine that tracks search patterns with support for pattern matching, statistical analysis, and client tracking.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local development server
 
-    /analyse:
-        get:
-            summary: Analyze search queries and provide statistics.
-            operationId: analyzeQuery
-            parameters:
-                - name: x-trace-id
-                  in: header
-                  description: Trace ID for log correlation.
-                  required: false
-                  schema:
-                      type: string
-                      example: "trace-abc123"
-                - name: analysis_token
-                  in: query
-                  description: Comma-separated list of tokens to analyze.
-                  required: true
-                  schema:
-                      type: string
-                      example: "the quick,lazy dog"
-                - name: match_type
-                  in: query
-                  description: Type of match for token analysis (e.g., exact, fuzzy).
-                  required: false
-                  schema:
-                      type: string
-                      example: "fuzzy"
-                - name: include_stats
-                  in: query
-                  description: Whether to include statistics in the response.
-                  required: false
-                  schema:
-                      type: boolean
-                      example: true
-            responses:
-                "200":
-                    description: Query analysis results.
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    results:
-                                        type: object
-                                        additionalProperties:
-                                            type: object
-                                            properties:
-                                                exact_matches:
-                                                    type: integer
-                                                fuzzy_matches:
-                                                    type: integer
-                                                unique_sessions:
-                                                    type: integer
-                                                client_distribution:
-                                                    type: object
-                                                    additionalProperties:
-                                                        type: integer
-                                    stats:
-                                        type: object
-                                        properties:
-                                            processing_time:
-                                                type: string
-                                                example: "45ms"
-                                            total_searches_analyzed:
-                                                type: integer
-                                                example: 2
-                                            unique_clients:
-                                                type: integer
-                                                example: 1
-                                            unique_sessions:
-                                                type: integer
-                                                example: 2
-                "400":
-                    description: Bad request.
-                "500":
-                    description: Internal server error.
-components:
-    securitySchemes:
-        traceId:
-            type: apiKey
-            in: header
-            name: x-trace-id
+paths:
+  /search:
+    post:
+      summary: Submit a search query for processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - search_query
+                - client_id
+                - session_id
+              properties:
+                search_query:
+                  type: string
+                  example: "The quick brown fox"
+                client_id:
+                  type: string
+                  example: "client_123"
+                session_id:
+                  type: string
+                  example: "session_1"
+      responses:
+        201:
+          description: Successfully processed the search query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+                  processed_tokens:
+                    type: integer
+                    example: 4
+                  processing_time:
+                    type: string
+                    example: "5ms"
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Invalid input data"
+        429:
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Too many requests from this client, please try again later"
+
+  /analyse:
+    get:
+      summary: Analyze search patterns
+      parameters:
+        - name: analysis_token
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "the quick,lazy dog"
+        - name: match_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [exact, fuzzy]
+            example: "fuzzy"
+        - name: include_stats
+          in: query
+          required: false
+          schema:
+            type: boolean
+            example: true
+      responses:
+        200:
+          description: Successfully analyzed search patterns
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        exact_matches:
+                          type: integer
+                          example: 1
+                        fuzzy_matches:
+                          type: integer
+                          example: 2
+                        client_distribution:
+                          type: object
+                          additionalProperties:
+                            type: integer
+                          example:
+                            client_123: 2
+                        unique_sessions:
+                          type: integer
+                          example: 2
+                  stats:
+                    type: object
+                    properties:
+                      processing_time:
+                        type: string
+                        example: "45ms"
+                      total_searches_analyzed:
+                        type: integer
+                        example: 2
+                      unique_clients:
+                        type: integer
+                        example: 1
+                      unique_sessions:
+                        type: integer
+                        example: 2
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Invalid query parameters"

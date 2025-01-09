@@ -18,12 +18,17 @@ module.exports = function (searchQuery, clientId, sessionId) {
 					searchQueriesContainingExactMatch: {
 						[searchQueryNormalized]: 1,
 					},
+					searchQueriesContainingFuzzyMatch: {
+						[searchQueryNormalized]: 1,
+					},
 				};
 				Cache.set(token, cachedToken);
 			} else {
 				cachedToken.normalizedSearchQuery = searchQueryNormalized;
 				cachedToken.searchQueriesContainingExactMatch = cachedToken.searchQueriesContainingExactMatch || {};
 				cachedToken.searchQueriesContainingExactMatch[searchQueryNormalized] = 1;
+				cachedToken.searchQueriesContainingFuzzyMatch = cachedToken.searchQueriesContainingFuzzyMatch || {};
+				cachedToken.searchQueriesContainingFuzzyMatch[searchQueryNormalized] = 1;
 			}
 
 			const existingCacheTokens = Cache.getKeys();

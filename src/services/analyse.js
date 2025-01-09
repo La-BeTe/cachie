@@ -1,6 +1,6 @@
 const Cache = require("../models/cache");
 
-module.exports = function (tokensToAnalyze, matchType, includeStats) {
+module.exports = function (tokensToAnalyse, matchType, includeStats) {
 	const results = {};
 	const resultStats = {
 		clientsAnalyzed: new Map(),
@@ -8,7 +8,7 @@ module.exports = function (tokensToAnalyze, matchType, includeStats) {
 		searchQueriesAnalyzed: new Map(),
 	};
 
-	tokensToAnalyze.forEach((token) => {
+	tokensToAnalyse.forEach((token) => {
 		const cacheEntry = Cache.get(token);
 		results[token] = {
 			exact_matches: 0,

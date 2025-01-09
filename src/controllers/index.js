@@ -3,7 +3,7 @@ const rateLimit = require("express-rate-limit");
 
 const searchController = require("./search");
 const Response = require("../utils/response");
-const analyzeController = require("./analyze");
+const analyseController = require("./analyse");
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ const rateLimiter = rateLimit({
 	},
 });
 
-router.get("/analyze", analyzeController);
+router.get("/analyse", analyseController);
 
 router.post("/search", rateLimiter, searchController);
 

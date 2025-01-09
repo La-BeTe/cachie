@@ -60,3 +60,5 @@ app.use((err, req, res, _) => {
 
 const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`));
+
+module.exports = app;
