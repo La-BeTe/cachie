@@ -1,6 +1,6 @@
 const Cache = require("../models/cache");
 
-function cacheSearchQuery(searchQuery, clientId, sessionId) {
+module.exports = function (searchQuery, clientId, sessionId) {
 	let searchQueryNormalized = searchQuery.trim().toLowerCase();
 	const searchQueryArr = searchQueryNormalized.split(" ").filter((q) => !!q.trim());
 	searchQueryNormalized = searchQueryArr.join(" ");
@@ -57,6 +57,4 @@ function cacheSearchQuery(searchQuery, clientId, sessionId) {
 	}
 
 	return searchQueryArr.length;
-}
-
-module.exports = cacheSearchQuery;
+};

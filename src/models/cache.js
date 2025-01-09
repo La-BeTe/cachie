@@ -1,7 +1,7 @@
 class Cache {
 	constructor() {
 		this.cache = new Map();
-		this.ttl = Number(process.env.CACHE_TTL_IN_MS) || 15 * 60 * 1000;
+		this.ttl = (Number(process.env.CACHE_TTL) || 15 * 60) * 1000;
 	}
 
 	set(key, value) {

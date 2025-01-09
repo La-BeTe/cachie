@@ -1,6 +1,6 @@
 const Cache = require("../models/cache");
 
-function analyzeString(tokensToAnalyze, matchType, includeStats) {
+module.exports = function (tokensToAnalyze, matchType, includeStats) {
 	const results = {};
 	const resultStats = {
 		clientsAnalyzed: new Map(),
@@ -53,27 +53,4 @@ function analyzeString(tokensToAnalyze, matchType, includeStats) {
 			total_searches_analyzed: resultStats.searchQueriesAnalyzed.size,
 		},
 	};
-}
-
-function getClientDistributionAndSessions(cacheKeys) {
-	let uniqueSessions = 0;
-	const clientDistribution = {};
-
-	cacheKeys.forEach((key) => {
-		const cacheEntry = Cache.get(key);
-		if (cacheEntry?.clientDistribution) {
-			Object.keys(cacheEntry.clientDistribution).forEach((client) => {
-				const clientData = cacheEntry.clientDistribution[client];
-				uniqueSessions += clientData.sessions.size;
-				clientDistribution[client] = (clientDistribution[client] || 0) + clientData.count;
-			});
-		}
-	});
-
-	return {
-		unique_sessions: uniqueSessions,
-		client_distribution: clientDistribution,
-	};
-}
-
-module.exports = analyzeString;
+};

@@ -1,63 +1,64 @@
 {
-  "name": "cachie",
-  "version": "0.0.0",
-  "description": "REST API server for the an in-memory cache analytics engine",
-  "main": "src/app.js",
-  "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "test": "jest",
-    "lint": "eslint --fix .",
-    "prepare": "husky install"
-  },
-  "keywords": [],
-  "author": "labete",
-  "license": "MIT",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "express-openapi": "^1.5.0",
-    "joi": "^17.13.3",
-    "pino": "^9.6.0"
-  },
-  "devDependencies": {
-    "dotenv": "^16.4.7",
-    "eslint": "^8.54.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "husky": "^8.0.0",
-    "jest": "^29.7.0",
-    "nodemon": "^3.0.1",
-    "pino-pretty": "^13.0.0",
-    "prettier": "^3.4.2",
-    "supertest": "^6.3.3"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "coverageDirectory": "coverage",
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ]
-  },
-  "eslintConfig": {
-    "env": {
-      "es2021": true,
-      "node": true,
-      "jest": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:prettier/recommended"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 12,
-      "sourceType": "module"
-    },
-    "rules": {}
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test && npm run lint"
-    }
-  }
+	"name": "cachie",
+	"version": "0.0.0",
+	"description": "REST API server for an in-memory cache analytics engine",
+	"main": "src/app.js",
+	"scripts": {
+		"start": "node src/app.js",
+		"dev": "nodemon src/app.js",
+		"test": "jest",
+		"lint": "eslint --fix .",
+		"prepare": "husky install"
+	},
+	"keywords": [],
+	"author": "labete",
+	"license": "MIT",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.18.2",
+		"express-openapi-validator": "^5.4.2",
+		"express-rate-limit": "^7.5.0",
+		"joi": "^17.13.3",
+		"pino": "^9.6.0"
+	},
+	"devDependencies": {
+		"dotenv": "^16.4.7",
+		"eslint": "^8.54.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-prettier": "^5.2.1",
+		"husky": "^8.0.0",
+		"jest": "^29.7.0",
+		"nodemon": "^3.0.1",
+		"pino-pretty": "^13.0.0",
+		"prettier": "^3.4.2",
+		"supertest": "^6.3.3"
+	},
+	"jest": {
+		"testEnvironment": "node",
+		"coverageDirectory": "coverage",
+		"collectCoverageFrom": [
+			"src/**/*.js"
+		]
+	},
+	"eslintConfig": {
+		"env": {
+			"es2021": true,
+			"node": true,
+			"jest": true
+		},
+		"extends": [
+			"eslint:recommended",
+			"plugin:prettier/recommended"
+		],
+		"parserOptions": {
+			"ecmaVersion": 12,
+			"sourceType": "module"
+		},
+		"rules": {}
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "npm test && npm run lint"
+		}
+	}
 }
